@@ -1,4 +1,5 @@
 import subprocess
+
 check_elevate = subprocess.run(
     ["pip", "show", "requests"], shell=True, capture_output=True
 ).returncode
@@ -20,8 +21,6 @@ import settingsManager as sM
 import sendData as sD
 from enableRunAtStartUp import createBat
 
-
-
 # Start screen
 print("Starting Key logger ...")
 createBat()
@@ -29,7 +28,14 @@ createBat()
 setting_values = sM.readSetting()
 if setting_values["username"] == "USERNAME":
     returnCode = subprocess.call("start getusername.py", shell=True)
-
+if setting_values["version"] != "v3":
+    recordsJson = rjM.readRecordLog()
+    for key in recordsJson:
+        if recordsJson[key]:
+            recordsJson[key] = False
+    rjM.updateRecordLog(recordsJson)
+    sM.setVersion()
+    print("Version updated")
 # Global variables
 username = str()
 latest_date = str()
