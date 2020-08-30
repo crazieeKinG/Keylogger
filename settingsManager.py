@@ -27,9 +27,9 @@ def setLatestDate(latest_date: str):
         sfile.close()
 
 
-def setVersion():
+def setVersion(version:str):
     prev_data = readSetting()
-    prev_data["version"] = "v3"
+    prev_data["version"] = version
     with open("settings.json", "w") as sfile:
         sfile.write(json.dumps(prev_data))
         sfile.close()
