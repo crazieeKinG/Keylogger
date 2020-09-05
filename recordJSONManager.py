@@ -1,5 +1,5 @@
 # List of all characters
-character_list = ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','TAB','CAPS_LOCK','SHIFT','CTRL_L','CMD','ALT_L','ALT_R','MENU','CTRL_R','SHIFT_R','ENTER','BACKSPACE','PRINT_SCREEN','SCROLL_LOCK','PAUSE','INSERT','HOME','PAGE_UP','DELETE','END','PAGE_DOWN','UP','DOWN','LEFT','RIGHT','!','@','#','$','%','^','&','*','(',')','_','+','{','}','|',':','"','>','?','<','~','`','-','=','[',']','\\',';','""',',','.','/','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12']
+character_list = ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','TAB','CAPS_LOCK','SHIFT','CTRL_L','CMD','ALT_L','SPACE','ALT_R','MENU','CTRL_R','SHIFT_R','ENTER','BACKSPACE','PRINT_SCREEN','SCROLL_LOCK','PAUSE','INSERT','HOME','PAGE_UP','DELETE','END','PAGE_DOWN','UP','DOWN','LEFT','RIGHT','!','@','#','$','%','^','&','*','(',')','_','+','{','}','|',':','"','>','?','<','~','`','-','=','[',']','\\',';','""',',','.','/','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12']
 length = len(character_list)
 # Dependencies
 import json
